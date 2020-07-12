@@ -19,12 +19,12 @@ public class JWT {
     public static String SECRET_KEY;
     public static int TTL_IN_MILLIS;
 
-    @Value("${cashde.jwt.secret}")
+    @Value("${myawesome.jwt.secret}")
     public void setSecretKey(String secretKey) {
         SECRET_KEY = secretKey;
     }
 
-    @Value("${cashde.jwt.ttl}")
+    @Value("${myawesome.jwt.ttl}")
     public void setTtlInMillis(int ttlInMillis) {
         TTL_IN_MILLIS = ttlInMillis;
     }
