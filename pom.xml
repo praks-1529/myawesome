@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.myawesome.core</groupId>
-    <artifactId>backend_service</artifactId>
-    <name>backend_service</name>
+    <artifactId>myawesome_service_1</artifactId>
+    <name>myawesome_service_1</name>
     <version>LATEST-RELEASE</version>
     <packaging>jar</packaging>    
     <properties>
