@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=479580041174.dkr.ecr.ap-south-1.amazonaws.com/myawesome-java-8:1.7
+ARG BASE_IMAGE=openjdk:8-jdk
 FROM ${BASE_IMAGE}
 ARG version
 COPY target/myawesome_service_1-LATEST-RELEASE.jar /app.jar
