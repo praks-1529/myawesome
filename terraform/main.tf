@@ -6,6 +6,14 @@ variable "aws_region" {
   default = "ap-south-1"
 }
 
+variable "product_market" {
+  default = "in"
+}
+
+variable "environment" {
+  default = "dev"
+}
+
 provider "aws" {
   region  = "${var.aws_region}"
   profile = "${var.aws_profile}"
