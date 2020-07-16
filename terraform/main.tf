@@ -9,7 +9,7 @@ variable "aws_region" {
 provider "aws" {
   region  = "${var.aws_region}"
   profile = "${var.aws_profile}"
-  version = ">= 1.0.0, < 2.0.0"
+  version = ">2.0.0"
 }
 
 terraform {
