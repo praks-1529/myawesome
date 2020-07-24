@@ -1,5 +1,5 @@
-environment                = "dev"
+environment                = "qa"
 aws_region                 = "ap-south-1"
-aws_profile                = "dev"
+aws_profile                = "qa"
 product_market             = "in"
 rds_instance_size          = "db.t2.micro"
