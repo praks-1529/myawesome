@@ -14,6 +14,10 @@ variable "environment" {
   default = "dev"
 }
 
+variable "component_name" {
+  default = ""
+}
+
 provider "aws" {
   region  = "${var.aws_region}"
   profile = "${var.aws_profile}"
