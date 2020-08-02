@@ -1,3 +1,7 @@
 .idea/*
 *.iml
 .m2/*
+target*
+k8s/deployment-manifest.json
+k8s/replaced-*
+k8s/*.json
