@@ -1,0 +1,12 @@
+version: "2"
+services:
+    db-myawesom_service:
+        container_name: db-myawesome_service
+        image: mysql:5.6
+        ports:
+            - "3310:3306"
+        environment:
+            - MYSQL_DATABASE=myawesome
+            - MYSQL_ROOT_PASSWORD=thisisroot
+            - MYSQL_USER=myawesome
+            - MYSQL_PASSWORD=thisisroot

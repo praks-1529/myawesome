@@ -1,0 +1,94 @@
+#!/usr/bin/python3
+import os
+import re
+import sys
+
+if len(sys.argv) <= 3:
+    print("[ERROR] : Mandatory parameters missing")
+    print("[Usage] : deploy_kube <input_file> <output_file> --deploy")
+    exit(1)
+
+# Input filename
+input_filename          = sys.argv[1]
+#Output filename
+output_file             = sys.argv[2]
+
+###############################################################################
+# Validate the mandatory args and construct a namespace and return
+###############################################################################
+def validate_and_get_namespace():
+    mandatory_env = ["COMPONENT_NAME", "ENV", "REGION", "PRODUCT_MARKET"]
+    for env in mandatory_env:
+        if env not in os.environ:
+            print("[ERROR] : Mandatory env missing" + env)
+            exit(0)
+
+    namespace = os.getenv("COMPONENT_NAME") + "-" + os.getenv("PRODUCT_MARKET") + "-" + os.getenv("ENV") + "-" + os.getenv("REGION")
+    return namespace
+
+###############################################################################
+# Replace environment variaables {ENV} with vale
+###############################################################################
+def replace_env_variable(ip_filename, op_filename):
+    f = open(op_filename, "w")
+    # Step-1: Read the IP file and replace ${ ENV_VAL } with actual values
+    file = open(ip_filename)
+    for line in file:
+      final_line = line
+      if "${" in line:
+        env_vals = re.findall(r'\$\{(.*?)\}', line)
+        for val in env_vals:
+            if val not in os.environ:
+                print("[ERROR] : Environment variable not set : " + val)
+                exit(1)
+            print("[INFO] : Replacing " + val + " with " + os.getenv(val))
+            final_line = line.replace("${" + val + "}", os.getenv(val))
+      f.write(final_line)
+    f.close()
+
+###############################################################################
+# Validate the JSONNET file
+###############################################################################
+def validate_k8s_obj_file(env_replaced_filename):
+    success = os.system("kubecfg validate " + env_replaced_filename)
+    if success != 0:
+        print("[ERROR] : Validation failed on jsonnet")
+        exit(1)
+    return 0
+
+###############################################################################
+# Convert JSONNET -> JSON/YAML
+###############################################################################
+def create_k8s_obj_file(jsonnet_file, json_file):
+    success = os.system("kubecfg show " + jsonnet_file + " -o json > " + json_file)
+    if success != 0:
+        print("[ERROR] : JSONNET error while converting the jsonnet -> json")
+        exit(1)
+
+###############################################################################
+# Deploy k8s
+###############################################################################
+def deploy_k8s(k8s_obj_file, namespace, option):
+    if option == "--deploy":
+        success = os.system("kubectl apply -f " + k8s_obj_file + " -n " + namespace)
+        if success != 0:
+            print("[ERROR] : Error while applying the config")
+            exit(1)
+
+###############################################################################
+# main
+###############################################################################
+def main():
+    namespace = validate_and_get_namespace()
+    # Output JSONNET file with env replaced
+    env_replaced_filename   = "replaced-" + sys.argv[1]
+    # Step-1: Replace the env variable with values
+    replace_env_variable(input_filename, env_replaced_filename)
+    # Step-2: Validate the jsonnet file
+    validate_k8s_obj_file(env_replaced_filename)
+    # Step-3: Create a final deployment-manifest json file
+    create_k8s_obj_file(env_replaced_filename, output_file)
+    #Step-4: Run the kubectl to update the cluster
+    deploy_k8s(output_file, namespace, sys.argv[3])
+
+main()

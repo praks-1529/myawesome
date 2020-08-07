@@ -3,4 +3,4 @@ FROM ${BASE_IMAGE}
 ARG version
 COPY ./target/myawesome_service_1-LATEST-RELEASE.jar /app.jar
 ENTRYPOINT ["/bin/sh", "-c"]
-CMD ["/usr/bin/java -Dspring.profiles.active=docker ${JVM_OPTS} -jar /app.jar"]
+CMD ["/usr/local/openjdk-8/bin/java -Dspring.profiles.active=docker ${JVM_OPTS} -jar /app.jar"]

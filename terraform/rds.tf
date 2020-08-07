@@ -20,4 +20,5 @@ resource "aws_db_instance" "server-db" {
   identifier           = "${var.component_name}-${var.product_market}-${var.environment}"
   apply_immediately    = "false"
   skip_final_snapshot = "true"
+  db_subnet_group_name = "db-connectivity"
 }
